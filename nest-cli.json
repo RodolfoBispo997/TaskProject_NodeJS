@@ -3,9 +3,13 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "deleteOutDir": true
-  },
-  "generateOptions": {
-    "baseDir": "modules"
+    "deleteOutDir": true,
+    "assets": [
+      {
+        "include": "generated/**/*",
+        "outDir": "dist/src"
+      }
+    ],
+    "watchAssets": true
   }
 }
