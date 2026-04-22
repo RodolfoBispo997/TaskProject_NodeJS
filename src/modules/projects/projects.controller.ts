@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   ParseUUIDPipe,
@@ -33,8 +34,14 @@ export class ProjectsController {
   @ApiResponse({
     type: [ProjectListItemDTO],
   })
-  findOne(@Param("id", ParseUUIDPipe) id: string) {
-    return this.projectsService.findById(id);
+  async findOne(@Param("id", ParseUUIDPipe) id: string) {
+    const result = await this.projectsService.findById(id);
+
+    if (!result) {
+      throw new HttpException("Task not found", HttpStatus.NOT_FOUND);
+    }
+
+    return result;
   }
 
   @Post()
@@ -49,16 +56,28 @@ export class ProjectsController {
   @ApiResponse({
     type: ProjectListItemDTO,
   })
-  update(
+  async update(
     @Param("id", ParseUUIDPipe) id: string,
     @Body() data: ProjectRequestDTO,
   ) {
+    const result = await this.projectsService.findById(id);
+
+    if (!result) {
+      throw new HttpException("Task not found", HttpStatus.NOT_FOUND);
+    }
+
     return this.projectsService.update(id, data);
   }
 
-  @Delete("id")
+  @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param("id", ParseUUIDPipe) id: string) {
+  async delete(@Param("id", ParseUUIDPipe) id: string) {
+    const result = await this.projectsService.findById(id);
+
+    if (!result) {
+      throw new HttpException("Task not found", HttpStatus.NOT_FOUND);
+    }
+
     return this.projectsService.remove(id);
   }
 }

@@ -16,7 +16,7 @@ export class ProjectRequestDTO {
   })
   @IsString()
   //variavel
-  description!: string;
+  description?: string;
 }
 
 export class ProjectListItemDTO {
