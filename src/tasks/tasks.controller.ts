@@ -9,25 +9,31 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseInterceptors,
 } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
 import { ApiResponse } from "@nestjs/swagger";
 import { TaskDTO } from "./tasks.dto";
+import { ValidateResourcesIdsInterceptor } from "../common/interceptors/validate-resources-ids.interceptor";
+import { ValidateResourcesIds } from "../common/decorators/validate-resources-ids.decorator";
 
 @Controller({
   version: "1",
   path: "projects/:projectId/tasks",
 })
+@UseInterceptors(ValidateResourcesIdsInterceptor)
 export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 
   @Get()
+  @ValidateResourcesIds()
   @ApiResponse({})
   findAllByProject(@Param("projectId", ParseUUIDPipe) projectId: string) {
     return this.taskService.findAllByProject(projectId);
   }
 
   @Get(":taskId")
+  @ValidateResourcesIds()
   @ApiResponse({})
   findById(
     @Param("taskId", ParseUUIDPipe) taskId: string,
@@ -37,6 +43,7 @@ export class TasksController {
   }
 
   @Post()
+  @ValidateResourcesIds()
   @ApiResponse({})
   create(
     @Param("projectId", ParseUUIDPipe) projectId: string,
@@ -46,6 +53,7 @@ export class TasksController {
   }
 
   @Put(":taskId")
+  @ValidateResourcesIds()
   @ApiResponse({})
   update(
     @Param("taskId", ParseUUIDPipe) taskId: string,
@@ -56,6 +64,7 @@ export class TasksController {
   }
 
   @Delete(":taskId")
+  @ValidateResourcesIds()
   @ApiResponse({})
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(
