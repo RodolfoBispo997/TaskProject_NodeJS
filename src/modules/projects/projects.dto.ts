@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
+import { TaskPriority, TaskStatus } from "../../generated/prisma";
 
 export class ProjectRequestDTO {
   @ApiProperty({
@@ -25,4 +26,21 @@ export class ProjectListItemDTO {
   @ApiProperty() description!: string;
   @ApiProperty({ format: "date-time" }) createdAt!: string;
   @ApiProperty({ format: "date-time" }) updatedAt!: string;
+}
+
+export class ProjectTaskDTO {
+  @ApiProperty() "id": string;
+  @ApiProperty() "title": string;
+  @ApiProperty({ nullable: true, required: false }) "description"?: string;
+  @ApiProperty({ enum: TaskStatus, default: TaskStatus.TODO }) "status": string;
+  @ApiProperty({ enum: TaskPriority, default: TaskPriority.MEDIUM })
+  "priority": string;
+  @ApiProperty({ nullable: true, required: false, format: "date-time" })
+  "dueDate"?: string;
+  @ApiProperty({ format: "date-time" }) "createdAt": string;
+  @ApiProperty({ format: "date-time" }) "updatedAt": string;
+}
+
+export class ProjectFullDTO extends ProjectListItemDTO {
+  @ApiProperty({ type: [ProjectListItemDTO] }) tasks!: ProjectTaskDTO[];
 }
