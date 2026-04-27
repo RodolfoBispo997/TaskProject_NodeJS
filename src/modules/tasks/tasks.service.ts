@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
-import { TaskDTO } from "./tasks.dto";
+import { PrismaService } from "../../prisma.service";
+import { TaskDTOList } from "./tasks.dto";
 
 @Injectable()
 export class TasksService {
@@ -23,7 +23,7 @@ export class TasksService {
     });
   }
 
-  async create(projectId: string, data: TaskDTO) {
+  async create(projectId: string, data: any) {
     return this.prisma.task.create({
       data: {
         ...data,
@@ -32,7 +32,7 @@ export class TasksService {
     });
   }
 
-  async update(projectId: string, taksId: string, data: TaskDTO) {
+  async update(projectId: string, taksId: string, data: any) {
     return this.prisma.task.update({
       where: {
         projectId: projectId,
