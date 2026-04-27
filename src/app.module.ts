@@ -6,6 +6,7 @@ import { PrismaService } from "./prisma.service";
 import { ConfigModule } from "@nestjs/config";
 import { TasksModule } from "./modules/tasks/tasks.module";
 import { UsersModule } from "./modules/users/users.module";
+import { CollaboratorsModule } from './collaborators/collaborators.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from "./modules/users/users.module";
     }),
     TasksModule,
     UsersModule,
+    CollaboratorsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
