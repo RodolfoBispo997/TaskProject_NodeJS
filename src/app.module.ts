@@ -6,7 +6,7 @@ import { PrismaService } from "./prisma.service";
 import { ConfigModule } from "@nestjs/config";
 import { TasksModule } from "./modules/tasks/tasks.module";
 import { UsersModule } from "./modules/users/users.module";
-import { CollaboratorsModule } from './collaborators/collaborators.module';
+import { CollaboratorsModule } from "./modules/collaborators/collaborators.module";
 
 @Module({
   imports: [
