@@ -47,7 +47,9 @@ export class UsersService {
 
   findByEmail(email: string) {
     return this.prisma.user.findFirst({
-      where: {},
+      where: {
+        email,
+      },
     });
   }
 

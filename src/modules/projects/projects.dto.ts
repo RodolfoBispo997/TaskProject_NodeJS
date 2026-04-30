@@ -8,7 +8,6 @@ export class ProjectRequestDTO {
   })
   @IsString()
   @IsNotEmpty()
-  //variavel
   name!: string;
 
   @ApiProperty({
@@ -16,8 +15,9 @@ export class ProjectRequestDTO {
     required: false,
   })
   @IsString()
-  //variavel
-  description?: string;
+  description!: string;
+
+  createdById!: string;
 }
 
 export class ProjectListItemDTO {

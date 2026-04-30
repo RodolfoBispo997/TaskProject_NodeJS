@@ -10,6 +10,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import {
@@ -19,11 +20,13 @@ import {
   UserListItemDTO,
 } from "./users.dto";
 import { ApiResponse } from "@nestjs/swagger";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth/jwt-auth.guard";
 
 @Controller({
   version: "1",
   path: "users",
 })
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 

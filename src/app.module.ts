@@ -7,6 +7,9 @@ import { ConfigModule } from "@nestjs/config";
 import { TasksModule } from "./modules/tasks/tasks.module";
 import { UsersModule } from "./modules/users/users.module";
 import { CollaboratorsModule } from "./modules/collaborators/collaborators.module";
+import { CommentsModule } from "./modules/comments/comments.module";
+import { AuthModule } from "./modules/auth/auth.module";
+import { RequestContextService } from "./common/services/request-context/request-context.service";
 
 @Module({
   imports: [
@@ -17,8 +20,10 @@ import { CollaboratorsModule } from "./modules/collaborators/collaborators.modul
     TasksModule,
     UsersModule,
     CollaboratorsModule,
+    CommentsModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, RequestContextService],
 })
 export class AppModule {}
