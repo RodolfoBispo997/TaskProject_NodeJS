@@ -1,9 +1,15 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { PrismaService } from "../../prisma.service";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { SignInDTO, SignUpDTO } from "./auth.dto";
 import bcrypt from "bcrypt";
+import { MailService } from "../mail/mail.service";
 
 @Injectable()
 export class AuthService {
@@ -11,6 +17,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
+    private readonly mailService: MailService,
   ) {}
 
   async signUp(data: SignUpDTO) {
@@ -44,6 +51,52 @@ export class AuthService {
       };
     } else {
       throw new UnauthorizedException();
+    }
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException("User not found.");
+    }
+
+    const token = this.jwtService.sign({
+      sub: user.id,
+      email: user.email,
+      purpose: "password_reset",
+    });
+
+    await this.mailService.sendPasswordRequest(user.email, token);
+
+    return {
+      message: "Password request email sent",
+    };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    try {
+      const payload = this.jwtService.verify(token);
+
+      if (payload.purpose !== "password_reset") {
+        throw new BadRequestException("Invalid token");
+      }
+
+      const user = await this.usersService.findById(payload.sub);
+
+      if (!user) {
+        throw new BadRequestException("Invalid token");
+      }
+
+      const hash = await bcrypt.hash(newPassword, 12);
+
+      return this.prisma.user.update({
+        where: { id: user.id },
+        data: { password: hash },
+      });
+    } catch (error) {
+      console.log("==.>>>>>", error);
+      throw new BadRequestException("Invalid or expired token");
     }
   }
 }

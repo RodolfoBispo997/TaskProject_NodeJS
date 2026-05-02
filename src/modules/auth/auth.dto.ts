@@ -53,10 +53,10 @@ export class ForgotPasswordDTO {
   @IsNotEmpty()
   email!: string;
 
-  @ApiProperty({ description: "User password" })
-  @IsEmail()
-  @IsNotEmpty()
-  password!: string;
+  // @ApiProperty({ description: "User password" })
+  // @IsEmail()
+  // @IsNotEmpty()
+  // password!: string;
 }
 
 export class ResetPasswordDTO {
@@ -68,5 +68,5 @@ export class ResetPasswordDTO {
   @ApiProperty({ description: "New password", minLength: 6 })
   @IsString()
   @IsNotEmpty()
-  password!: string;
+  newPassword!: string;
 }

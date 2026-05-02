@@ -9,7 +9,12 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { SignInDTO, SignUpDTO } from "./auth.dto";
+import {
+  ForgotPasswordDTO,
+  ResetPasswordDTO,
+  SignInDTO,
+  SignUpDTO,
+} from "./auth.dto";
 import { AuthGuard } from "@nestjs/passport";
 import type { User } from "../../generated/prisma";
 import { AuthenticatedUser } from "../../common/decorators/authenticated-user.decorator";
@@ -38,5 +43,17 @@ export class AuthController {
     return {
       message: `Authenticate ${user.email}`,
     };
+  }
+
+  @Post("forgot-password")
+  @HttpCode(HttpStatus.OK)
+  forgotPassword(@Body() data: ForgotPasswordDTO) {
+    return this.authService.forgotPassword(data.email);
+  }
+
+  @Post("reset-password")
+  @HttpCode(HttpStatus.OK)
+  resetPassword(@Body() data: ResetPasswordDTO) {
+    return this.authService.resetPassword(data.token, data.newPassword);
   }
 }

@@ -8,8 +8,15 @@
       {
         "include": "generated/**/*",
         "outDir": "dist/src"
+      },
+      {
+        "include": "modules/mail/templates/**/*",
+        "outDir": "dist"
       }
     ],
     "watchAssets": true
+  },
+  "generateOptions": {
+    "baseDir": "modules"
   }
 }
