@@ -1,18 +1,17 @@
 import { MailerService } from "@nestjs-modules/mailer";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { EMAIL_SERVICE, SEND_PASSWORD_RESET } from "../../consts";
+import { ClientProxy } from "@nestjs/microservices";
 
 @Injectable()
 export class MailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(@Inject(EMAIL_SERVICE) private client: ClientProxy) {}
 
   async sendPasswordRequest(email: string, token: string) {
-    await this.mailerService.sendMail({
-      to: email,
-      subject: "Redefinição de senha",
-      template: "forgot-password",
-      context: {
-        url: `http:localhost:30000/v1/auth/reset-password?token=${token}`,
-      },
-    });
+    const url = `http://localhost:3000/v1/auth/reset-password?token=${token}`;
+
+    await this.client.connect();
+
+    this.client.emit(SEND_PASSWORD_RESET, { email, url });
   }
 }

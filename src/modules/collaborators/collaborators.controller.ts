@@ -20,6 +20,7 @@ import {
   UpdateCollaboratorDTO,
 } from "./collaborators.dto";
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiResponse,
@@ -33,6 +34,7 @@ import { JwtAuthGuard } from "../../common/guards/jwt-auth/jwt-auth.guard";
 })
 @UseInterceptors(ValidateResourcesIdsInterceptor)
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth("jwt")
 export class CollaboratorsController {
   constructor(private readonly collaboratorService: CollaboratorsService) {}
 

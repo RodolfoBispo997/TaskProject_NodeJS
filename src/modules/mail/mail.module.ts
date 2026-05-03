@@ -3,8 +3,10 @@ import { MailService } from "./mail.service";
 import { MailerModule } from "@nestjs-modules/mailer";
 import path from "node:path";
 import { HandlebarsAdapter } from "@nestjs-modules/mailer/adapters/handlebars.adapter";
-import strict from "node:assert/strict";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ClientsModule, Transport } from "@nestjs/microservices";
+import { EMAIL_QUEUE, EMAIL_SERVICE } from "../../consts";
+import { MailConsumer } from "./mail.consumer";
 
 @Module({
   imports: [
@@ -33,8 +35,33 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
         },
       }),
     }),
+
+    ClientsModule.registerAsync([
+      {
+        name: EMAIL_SERVICE,
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (config: ConfigService) => {
+          const url = config.get<string>("RABBITMQ_URL");
+
+          if (!url) {
+            throw new Error("RABBITMQ_URL is not defined");
+          }
+
+          return {
+            transport: Transport.RMQ,
+            options: {
+              urls: [url],
+              queue: EMAIL_QUEUE,
+              queueOptions: { durable: true },
+            },
+          };
+        },
+      },
+    ]),
   ],
   providers: [MailService],
-  exports: [MailService],
+  exports: [MailService, ClientsModule],
+  controllers: [MailConsumer],
 })
 export class MailModule {}
