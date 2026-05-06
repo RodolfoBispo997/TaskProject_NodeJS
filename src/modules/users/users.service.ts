@@ -1,13 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma.service";
-import { CreateUserDTPo, UpdateUserDTO } from "./users.dto";
+import { CreateUserDTPo, UpdateUserDTO, UserListItemDTO } from "./users.dto";
+import { QueryPaginationDTO } from "../../common/dtos/query-pagination.dto";
+import { paginate, paginateOutPut } from "../../utils/pagination.utils";
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findByAll() {
-    return this.prisma.user.findMany({
+  async findByAll(query?: QueryPaginationDTO) {
+    const users = await this.prisma.user.findMany({
+      ...paginate(query),
       select: {
         id: true,
         name: true,
@@ -18,6 +21,9 @@ export class UsersService {
         updatedAt: true,
       },
     });
+    const total = await this.prisma.user.count();
+
+    return paginateOutPut<UserListItemDTO>(users, total, query);
   }
 
   findById(id: string) {

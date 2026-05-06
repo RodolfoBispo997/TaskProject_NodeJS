@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
@@ -27,6 +28,8 @@ import {
 } from "@nestjs/swagger";
 import { CollaboratorsService } from "./collaborators.service";
 import { JwtAuthGuard } from "../../common/guards/jwt-auth/jwt-auth.guard";
+import { ApiPaginatedResponse } from "../../common/swagger/api-paginated-response";
+import { QueryPaginationDTO } from "../../common/dtos/query-pagination.dto";
 
 @Controller({
   version: "1",
@@ -40,9 +43,12 @@ export class CollaboratorsController {
 
   @Get()
   @ValidateResourcesIds()
-  @ApiResponse({ type: [CollaboratorListItemDTO] })
-  findAllByProject(@Param("projectId", ParseUUIDPipe) projectId: string) {
-    return this.collaboratorService.findAllByProject(projectId);
+  @ApiPaginatedResponse(CollaboratorListItemDTO)
+  findAllByProject(
+    @Param("projectId", ParseUUIDPipe) projectId: string,
+    @Query() query?: QueryPaginationDTO,
+  ) {
+    return this.collaboratorService.findAllByProject(projectId, query);
   }
 
   @Post()

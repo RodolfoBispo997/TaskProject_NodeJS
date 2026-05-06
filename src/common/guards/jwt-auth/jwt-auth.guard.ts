@@ -1,9 +1,9 @@
-import { ExecutionContext, Injectable } from "@nestjs/common";
+import { ExecutionContext, Injectable, Scope } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { RequestContextService } from "../../services/request-context/request-context.service";
 import { Observable } from "rxjs";
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class JwtAuthGuard extends AuthGuard("jwt") {
   constructor(private readonly requestContext: RequestContextService) {
     super();

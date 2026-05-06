@@ -9,9 +9,12 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtStrategy } from "./jwt.strategy";
 import { MailService } from "../mail/mail.service";
 import { MailModule } from "../mail/mail.module";
+import { RequestContextModule } from "../../common/services/request-context/request-context.module";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth/jwt-auth.guard";
 
 @Module({
   imports: [
+    RequestContextModule,
     MailModule,
     PassportModule,
     ConfigModule,
@@ -24,6 +27,12 @@ import { MailModule } from "../mail/mail.module";
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService, PrismaService, JwtStrategy],
+  providers: [
+    AuthService,
+    UsersService,
+    PrismaService,
+    JwtStrategy,
+    JwtAuthGuard,
+  ],
 })
 export class AuthModule {}

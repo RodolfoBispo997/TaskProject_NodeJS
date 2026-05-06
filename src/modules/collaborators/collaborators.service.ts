@@ -6,16 +6,20 @@ import {
 import { PrismaService } from "../../prisma.service";
 import {
   AddCollaboratorsDTO,
+  CollaboratorListItemDTO,
   UpdateCollaboratorDTO,
 } from "./collaborators.dto";
 import { CollaboratorRole } from "../../generated/prisma";
+import { QueryPaginationDTO } from "../../common/dtos/query-pagination.dto";
+import { paginate, paginateOutPut } from "../../utils/pagination.utils";
 
 @Injectable()
 export class CollaboratorsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAllByProject(projectId: string) {
-    return this.prisma.projectCollaborator.findMany({
+  async findAllByProject(projectId: string, query?: QueryPaginationDTO) {
+    const collaborators = await this.prisma.projectCollaborator.findMany({
+      ...paginate(query),
       where: {
         projectId,
       },
@@ -30,6 +34,12 @@ export class CollaboratorsService {
         },
       },
     });
+    const total = await this.prisma.projectCollaborator.count({
+      where: {
+        projectId,
+      },
+    });
+    return paginateOutPut<CollaboratorListItemDTO>(collaborators, total, query);
   }
 
   async create(projectId: string, data: AddCollaboratorsDTO) {
