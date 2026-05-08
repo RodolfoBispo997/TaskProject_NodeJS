@@ -15,17 +15,6 @@ export class CloudinaryService {
     // this.testConnection();
   }
 
-  // async testConnection() {
-  //   try {
-  //     const res = await cloudinary.uploader.upload(
-  //       "https://res.cloudinary.com/demo/image/upload/sample.jpg",
-  //     );
-  //     console.log("UPLOAD OK >>>", res.secure_url);
-  //   } catch (err) {
-  //     console.error("UPLOAD ERROR >>>", err);
-  //   }
-  // }
-
   async upload(
     file: Express.Multer.File,
     name: string,

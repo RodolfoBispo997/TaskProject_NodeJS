@@ -8,7 +8,7 @@ import { paginate, paginateOutPut } from "../../utils/pagination.utils";
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByAll(query?: QueryPaginationDTO) {
+  async findAll(query?: QueryPaginationDTO) {
     const users = await this.prisma.user.findMany({
       ...paginate(query),
       select: {

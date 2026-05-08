@@ -45,7 +45,7 @@ export class CommentsController {
   @Get()
   @ValidateResourcesIds()
   @ApiPaginatedResponse(CommentListItemDTO)
-  findAllByTask(
+  findAllByTasks(
     @Param("taskId", ParseUUIDPipe) taskId: string,
     @Query() query?: QueryPaginationDTO,
   ) {

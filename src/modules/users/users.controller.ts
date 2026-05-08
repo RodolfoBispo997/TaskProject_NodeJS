@@ -50,13 +50,13 @@ export class UsersController {
 
   @Get()
   @ApiPaginatedResponse(UserListItemDTO)
-  findByAll(@Query() query?: QueryPaginationDTO) {
-    return this.userService.findByAll(query);
+  findAll(@Query() query?: QueryPaginationDTO) {
+    return this.userService.findAll(query);
   }
 
   @Get(":userId")
   @ApiResponse({ type: UserFullDTIO })
-  async findById(@Param("userId", ParseUUIDPipe) userId: string) {
+  async findOne(@Param("userId", ParseUUIDPipe) userId: string) {
     const user = await this.userService.findById(userId);
 
     if (!user) {

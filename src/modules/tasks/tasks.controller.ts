@@ -54,8 +54,8 @@ export class TasksController {
     type: TaskFullDTO,
   })
   findById(
-    @Param("taskId", ParseUUIDPipe) taskId: string,
     @Param("projectId", ParseUUIDPipe) projectId: string,
+    @Param("taskId", ParseUUIDPipe) taskId: string,
   ) {
     return this.taskService.findById(projectId, taskId);
   }
