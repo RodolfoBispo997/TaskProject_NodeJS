@@ -77,7 +77,7 @@ export class ProjectsController {
   @Delete(":projectId")
   @HttpCode(HttpStatus.NO_CONTENT)
   @ValidateResourcesIds()
-  async delete(@Param("projectId", ParseUUIDPipe) id: string) {
+  async remove(@Param("projectId", ParseUUIDPipe) id: string) {
     return this.projectsService.remove(id);
   }
 }

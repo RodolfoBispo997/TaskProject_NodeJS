@@ -15,8 +15,10 @@ describe("AppController", () => {
   });
 
   describe("HealthCheck", () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe("Hello World!");
+    it('should return "API is running!!"', () => {
+      expect(appController.getHealthCheck()).toEqual({
+        message: "API is running!!",
+      });
     });
   });
 });

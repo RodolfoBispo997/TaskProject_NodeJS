@@ -21,7 +21,7 @@ export class AppController {
       },
     },
   })
-  getHello(): { message: string } {
+  getHealthCheck(): { message: string } {
     return this.appService.getHealthCheck();
   }
 }

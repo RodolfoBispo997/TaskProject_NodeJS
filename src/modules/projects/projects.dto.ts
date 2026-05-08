@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { TaskPriority, TaskStatus } from "../../generated/prisma";
 
 export class ProjectRequestDTO {
@@ -15,9 +15,10 @@ export class ProjectRequestDTO {
     required: false,
   })
   @IsString()
-  description!: string;
+  @IsOptional()
+  description?: string | null;
 
-  createdById!: string;
+  createdById?: string;
 }
 
 export class ProjectListItemDTO {
