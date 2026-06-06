@@ -1,3 +1,4 @@
+import { PrismaService } from "./prisma.service";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
@@ -8,6 +9,9 @@ import { EMAIL_QUEUE } from "./consts";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
+
   //Versionamento
   app.enableVersioning({
     type: VersioningType.URI,
@@ -15,8 +19,10 @@ async function bootstrap() {
 
   //Swagger
   const config = new DocumentBuilder()
-    .setTitle("Tasks API")
-    .setDescription("API desenvolvida para consolidar conhecimentos")
+    .setTitle("Task Management API")
+    .setDescription(
+      "API de gerenciamento de projetos e tarefas com autenticação JWT, controle de acesso por papéis, PostgreSQL, RabbitMQ e arquitetura modular.",
+    )
     .setVersion("1")
     .addBearerAuth(
       {

@@ -33,6 +33,8 @@ import { JwtAuthGuard } from "../../common/guards/jwt-auth/jwt-auth.guard";
     PrismaService,
     JwtStrategy,
     JwtAuthGuard,
+    MailService,
+    RequestContextModule,
   ],
 })
 export class AuthModule {}
